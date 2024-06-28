@@ -6,10 +6,10 @@
   <title>Percentage Calculator</title>
 
   <style>
-    body {
+    * {
+      font-size: 1.7vh;
       color: black;
       font-family: system-ui;
-      font-size: 1.5vh;
     }
 
     #main {
@@ -40,32 +40,32 @@
     #form input[type="number"] {
       padding: 15px 20px;
       border-radius:5px;
-      border: 2px solid black;
+      border: 2px solid rgb(135 182 185);
       min-width: 200px;
       flex-grow: 1;
       outline: none;
     }
 
     #form input[type="number"]:focus {
-      border: 2px solid rgb(44 174 183);
+      border: 2px solid black;
     }
 
     #form button {
       padding: 15px 0;
-      background: rgb(78 211 220);
-      color: black;
+      background: rgb(134 208 213);
+      /* color: black; */
       border: 0;
       border-radius: 5px;
       font-weight: 500;
       min-width: 50px;
       flex-grow: 1;
-      -webkit-box-shadow: 5px 4px 3px 0px rgba(0,0,0,0.75);
-      -moz-box-shadow: 5px 4px 3px 0px rgba(0,0,0,0.75);
-      box-shadow: 5px 4px 3px 0px rgba(0,0,0,0.75);
+      -webkit-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
+      -moz-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
+      box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
     }
 
     #form button:active {
-      background: rgb(44 174 183);
+      background: rgb(108 171 175);
       -webkit-box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.75);
       -moz-box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.75);
       box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.75);
@@ -73,7 +73,6 @@
 
     #results {
       padding: 10px 0;
-      font-size: 1.8vh;
       text-align: left;
     }
 
@@ -90,7 +89,7 @@
       margin-bottom: 20px;
       padding: 15px;
       border-radius: 8px;
-      background: rgb(208 223 226);
+      background: rgb(208 223 226 / 52%);
     }
   </style>
 </head>
@@ -136,14 +135,14 @@
       val1Input.style.border = '2px solid red';
       shouldDisplayMessage = true;
     } else {
-      val1Input.style.border =  document.activeElement === val1Input ? '2px solid rgb(44 174 183)' : '2px solid black';
+      val1Input.style.border =  document.activeElement === val1Input ? '2px solid black' : '2px solid rgb(135 182 185)';
     }
 
     if (!getInputValue(val2Input) && !inputPristineMap.val2) {
       val2Input.style.border = '2px solid red';
       shouldDisplayMessage = true;
     } else {
-      val2Input.style.border =  document.activeElement === val2Input ? '2px solid rgb(44 174 183)' : '2px solid black';
+      val2Input.style.border =  document.activeElement === val2Input ? '2px solid black' : '2px solid rgb(135 182 185)';
     }
 
     document.querySelector('#notice').style.display = shouldDisplayMessage ? 'block' : 'none';
@@ -212,33 +211,32 @@
     `;
   };
 
-  const acceptedKeyValuesOnly = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ','];
-  const acceptedKeysNoTab = [...acceptedKeyValuesOnly, 'backspace', 'enter'];
-  const acceptedKeys = [...acceptedKeysNoTab, 'tab'];
+  const breakPristineKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const bannedKeys = ['e', '-', '+'];
 
   val1Input.addEventListener('keydown', e => {
-    if (acceptedKeyValuesOnly.includes(e.key.toLocaleLowerCase())) {
+    if (breakPristineKeys.includes(e.key.toLocaleLowerCase())) {
       inputPristineMap.val1 = false;
     }
 
-    if (!acceptedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
+    if (bannedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
   });
 
   val2Input.addEventListener('keydown', e => {
-    if (acceptedKeyValuesOnly.includes(e.key.toLocaleLowerCase())) {
+    if (breakPristineKeys.includes(e.key.toLocaleLowerCase())) {
       inputPristineMap.val2 = false;
     }
 
-    if (!acceptedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
+    if (bannedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
   });
 
   val1Input.addEventListener('keyup', e => {
-    if (!acceptedKeysNoTab.includes(e.key.toLocaleLowerCase())) return;
+    if (bannedKeys.includes(e.key.toLocaleLowerCase())) return;
     run();
   });
 
   val2Input.addEventListener('keyup', e => {
-    if (!acceptedKeysNoTab.includes(e.key.toLocaleLowerCase())) return;
+    if (bannedKeys.includes(e.key.toLocaleLowerCase())) return;
     run();
   });
 
@@ -247,6 +245,9 @@
 
   val1Input.addEventListener('blur', checkAndUpdateErrorStatus);
   val2Input.addEventListener('blur', checkAndUpdateErrorStatus);
+
+  val1Input.addEventListener('change', run);
+  val2Input.addEventListener('change', run);
 
   document.querySelector('#reset').addEventListener('click', reaload);
 
