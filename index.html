@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,6 +87,10 @@
       display: none;
     }
 
+    #notice b {
+      color: rgb(224, 0, 0);
+    }
+
     .resultSection {
       display: flex;
       flex-direction: column;
@@ -102,14 +106,14 @@
   <div id="main">
     <div id="form">
       <div>
-        <input type="number" placeholder="Prima valoare" step="0.01" id="val1">
-        <input type="number" placeholder="A doua valoare" step="0.01" id="val2">
+        <input type="number" placeholder="First Value" step="0.01" id="val1">
+        <input type="number" placeholder="Second Value" step="0.01" id="val2">
       </div>
       <div>
-        <button id="reset">Reseteaza</button>
+        <button id="reset">Reset</button>
       </div>
     </div>
-    <div id="notice">Valorile trebuie sa fie mai mari decat <b>0</b></div>
+    <div id="notice">Values must be bigger than <b>0</b></div>
     <div id="results"></div>
   </div>
 </body>
@@ -190,27 +194,27 @@
     resultsView.innerHTML = `
       <div>
         <div class="resultSection">
-          <div>Diferenta dintre cele doua valori este <b>${diff}</b></div>
-          <div>Aceasta diferenta (<b>${diff}</b>) reprezinta:</div>
+          <div>The difference between values is <b>${diff}</b></div>
+          <div>The difference (<b>${diff}</b>) represents:</div>
           <ul style="margin: 0;">
-            <li style="margin-bottom: 10px"><b>${lowerP}%</b> din <b>${bigger}</b></li>
-            <li><b>${biggerP}%</b> din <b>${lower}</b></li>
+            <li style="margin-bottom: 10px"><b>${lowerP}%</b> of <b>${bigger}</b></li>
+            <li><b>${biggerP}%</b> of <b>${lower}</b></li>
           </ul>
         </div>
 
         <div class="resultSection">
-          <div><b>${lower}</b> este cu <b>${lowerP}%</b> mai mic decat <b>${bigger}</b></div>
-          <div><b>${bigger}</b> este cu <b>${biggerP}%</b> mai mare decat <b>${lower}</b></div>
+          <div><b>${lower}</b> is <b>${lowerP}%</b> smaller than <b>${bigger}</b></div>
+          <div><b>${bigger}</b> is <b>${biggerP}%</b> bigger than <b>${lower}</b></div>
         </div>
 
         <div class="resultSection">
-          <div><b>${lower}</b> reprezinta <b>${lowerPfromBigger}%</b> din <b>${bigger}</b></div>
-          <div><b>${bigger}</b> reprezinta <b>${biggerPfromLower}%</b> din <b>${lower}</b></div>
+          <div><b>${lower}</b> represents <b>${lowerPfromBigger}%</b> of <b>${bigger}</b></div>
+          <div><b>${bigger}</b> represents <b>${biggerPfromLower}%</b> of <b>${lower}</b></div>
         </div>
 
         <div class="resultSection">
-          <div><b>${lower}%</b> din <b>${bigger}</b> este <b>${pFromBigger}</b></div>
-          <div><b>${bigger}%</b> din <b>${lower}%</b> este <b>${pFromLower}</b></div>
+          <div><b>${lower}%</b> of <b>${bigger}</b> equals <b>${pFromBigger}</b></div>
+          <div><b>${bigger}%</b> of <b>${lower}</b> equals <b>${pFromLower}</b></div>
         </div>
       </div>
     `;
