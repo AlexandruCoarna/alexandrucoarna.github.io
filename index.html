@@ -100,14 +100,26 @@
     const lowerP = ((diff * 100) / bigger).toFixed(2);
     const biggerP = ((diff * 100) / lower).toFixed(2);
 
+    const lowerPfromBigger = ((lower * 100) / bigger).toFixed(2);
+    const biggerPfromLower = ((bigger * 100) / lower).toFixed(2);
+
+    const pFromLower = ((bigger / 100) * lower).toFixed(2);
+    const pFromBigger = ((lower / 100) * bigger).toFixed(2);
+
     document.querySelector('#results').innerHTML = `
       <p>
-        Diferenta dintre cele doua valori este <b>${diff}</b> <br><br>
-        Aceasta reprezinta: <br>
-        &nbsp; - <b>${lowerP}%</b> din <b>${bigger}</b> <br>
-        &nbsp; - <b>${biggerP}%</b> din <b>${lower}</b> <br><br>
-        <b>${lower}</b> este cu <b>${lowerP}%</b> mai mic decat <b>${bigger}</b> <br><br>
-        <b>${bigger}</b> este cu <b>${biggerP}%</b> mai mare decat <b>${lower}</b> <br><br>
+        Diferenta dintre cele doua valori este <b>${diff}</b><br><br>
+        Aceasta reprezinta:<br>
+        &nbsp; - <b>${lowerP}%</b> din <b>${bigger}</b><br>
+        &nbsp; - <b>${biggerP}%</b> din <b>${lower}</b><br><br>
+        <b>${lower}</b> este cu <b>${lowerP}%</b> mai mic decat <b>${bigger}</b><br><br>
+        <b>${bigger}</b> este cu <b>${biggerP}%</b> mai mare decat <b>${lower}</b><br><br><br>
+
+        <b>${lower}</b> reprezinta <b>${lowerPfromBigger}%</b> din <b>${bigger}</b><br><br>
+        <b>${bigger}</b> reprezinta <b>${biggerPfromLower}%</b> din <b>${lower}</b><br><br><br>
+
+        <b>${lower}%</b> din <b>${bigger}</b> este <b>${pFromBigger}</b><br><br>
+        <b>${bigger}%</b> din <b>${lower}%</b> este <b>${pFromLower}</b><br><br>
       </p>
     `;
   };
