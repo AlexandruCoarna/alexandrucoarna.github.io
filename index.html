@@ -18,6 +18,7 @@
     gap: 5px;
     flex-direction: column;
     max-width: 920px;
+    min-width: 275px;
   }
 
   #form {
@@ -114,18 +115,22 @@
 
     document.querySelector('#results').innerHTML = `
       <p>
-        Diferenta dintre cele doua valori este <b>${diff}</b><br><br>
-        Aceasta reprezinta:<br>
-        &nbsp; - <b>${lowerP}%</b> din <b>${bigger}</b><br>
-        &nbsp; - <b>${biggerP}%</b> din <b>${lower}</b><br><br>
-        <b>${lower}</b> este cu <b>${lowerP}%</b> mai mic decat <b>${bigger}</b><br><br>
-        <b>${bigger}</b> este cu <b>${biggerP}%</b> mai mare decat <b>${lower}</b><br><br><br>
+        <div style="margin-bottom: 25px">Diferenta dintre cele doua valori este <b>${diff}</b></div>
 
-        <b>${lower}</b> reprezinta <b>${lowerPfromBigger}%</b> din <b>${bigger}</b><br><br>
-        <b>${bigger}</b> reprezinta <b>${biggerPfromLower}%</b> din <b>${lower}</b><br><br><br>
+        <div style="margin-bottom: -5px">Aceasta diferenta (<b>${diff}</b>) reprezinta:</div>
+        <ul style="margin-bottom: 25px">
+          <li style="margin-bottom: 10px"><b>${lowerP}%</b> din <b>${bigger}</b></li>
+          <li><b>${biggerP}%</b> din <b>${lower}</b></li>
+        </ul>
 
-        <b>${lower}%</b> din <b>${bigger}</b> este <b>${pFromBigger}</b><br><br>
-        <b>${bigger}%</b> din <b>${lower}%</b> este <b>${pFromLower}</b><br><br>
+        <div style="margin-bottom: 10px"><b>${lower}</b> este cu <b>${lowerP}%</b> mai mic decat <b>${bigger}</b></div>
+        <div style="margin-bottom: 25px"><b>${bigger}</b> este cu <b>${biggerP}%</b> mai mare decat <b>${lower}</b></div>
+
+        <div style="margin-bottom: 10px"><b>${lower}</b> reprezinta <b>${lowerPfromBigger}%</b> din <b>${bigger}</b></div>
+        <div style="margin-bottom: 25px"><b>${bigger}</b> reprezinta <b>${biggerPfromLower}%</b> din <b>${lower}</b></div>
+
+        <div style="margin-bottom: 10px"><b>${lower}%</b> din <b>${bigger}</b> este <b>${pFromBigger}</b></div>
+        <div style="margin-bottom: 25px"><b>${bigger}%</b> din <b>${lower}%</b> este <b>${pFromLower}</b></div>
       </p>
     `;
   };
