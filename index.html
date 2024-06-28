@@ -8,7 +8,7 @@
 <style>
   body {
     color: black;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: system-ui;
   }
 
   #main {
@@ -23,14 +23,21 @@
   #form {
     padding: 5px;
     display: flex;
-    gap: 10px;
+    gap: 7px;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
   }
 
+  #form div {
+    display: flex;
+    gap: 7px;
+    flex-grow: 1;
+    flex-wrap: wrap;
+  }
+
   #form input[type="number"] {
-    padding: 10px 15px;
+    padding: 15px 20px;
     outline: none;
     border-radius:5px;
     border: 1px solid gray;
@@ -39,37 +46,44 @@
   }
 
   #form button {
-    padding: 10px;
+    padding: 15px 20px;
     background: rgb(75, 173, 234);
     border: 0;
     border-radius: 5px;
-    min-width: 170px;
+    min-width: 130px;
     flex-grow: 1;
   }
 
   #results {
     padding: 10px 20px;
-    font-size: 2vh;
+    font-size: 1.8vh;
     text-align: left;
   }
 </style>
 <body>
   <div id="main">
     <div id="form">
-      <input type="number" placeholder="Primul numar" step=".01">
-      <input type="number" placeholder="Al doilea numar" step=".01">
-      <button id="run">Calculeaza</button>
-      <button id="reset">Reseteaza</button>
+      <div>
+        <input type="number" placeholder="Prima valoare" step=".01" id="val1">
+        <input type="number" placeholder="A doua valoare" step=".01" id="val2">
+      </div>
+      <div>
+        <button id="run">Calculeaza</button>
+        <button id="reset">Reseteaza</button>
+      </div>
     </div>
     <div id="results"></div>
   </div>
 </body>
 
 <script>
-  const run = () => {
-    const [val1, val2] = Array.from(document.querySelector('#form').childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE).map(node => +node.value);
+  const reaload = () => window.location.reload();
 
-    if (!val1 || !val2) return;
+  const run = () => {
+    const val1 = +document.querySelector('#val1').value;
+    const val2 = +document.querySelector('#val2').value;
+
+    if ((!val1 && val1 !==0 )|| (!val2 && val2 !==0)) return;
 
     let bigger, lower;
 
@@ -86,19 +100,24 @@
     const lowerP = ((diff * 100) / bigger).toFixed(2);
     const biggerP = ((diff * 100) / lower).toFixed(2);
 
-    document.querySelector('#results').innerText = `
-      Diferenta dintre cele doua numere este ${diff} \n
-      Aceasta reprezinta: \n
-        \t [${lowerP}% din ${bigger}] \n
-        \t [${biggerP}% din ${lower}] \n
-      ${lower} este cu ${lowerP}% mai mic decat ${bigger} \n
-      ${bigger} este cu ${biggerP}% mai mare decat ${lower} \n
+    document.querySelector('#results').innerHTML = `
+      <p>
+        Diferenta dintre cele doua valori este <b>${diff}</b> <br><br>
+        Aceasta reprezinta: <br>
+        &nbsp; - <b>${lowerP}%</b> din <b>${bigger}</b> <br>
+        &nbsp; - <b>${biggerP}%</b> din <b>${lower}</b> <br><br>
+        <b>${lower}</b> este cu <b>${lowerP}%</b> mai mic decat <b>${bigger}</b> <br><br>
+        <b>${bigger}</b> este cu <b>${biggerP}%</b> mai mare decat <b>${lower}</b> <br><br>
+      </p>
     `;
   };
 
   document.querySelector('#run').addEventListener('click', run);
-  document.querySelector('#reset').addEventListener('click', () => window.location.reload());
+
+  document.querySelector('#reset').addEventListener('click', reaload);
+
   document.addEventListener('keydown', e => {
+    if (e.key.toLocaleLowerCase() === 'escape') reaload();
     if (e.key.toLocaleLowerCase() === 'enter') run();
   })
 </script>
