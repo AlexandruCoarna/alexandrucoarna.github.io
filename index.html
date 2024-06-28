@@ -23,7 +23,7 @@
   #form {
     padding: 5px;
     display: flex;
-    gap: 7px;
+    gap: 8px;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
@@ -59,9 +59,15 @@
     font-size: 1.8vh;
     text-align: left;
   }
+
+  #notice {
+    padding: 5px;
+    color: rgb(224, 0, 0);
+  }
 </style>
 <body>
   <div id="main">
+    <div id="notice">Valorile trebuie sa fie mai mari decat <b>0</b></div>
     <div id="form">
       <div>
         <input type="number" placeholder="Prima valoare" step=".01" id="val1">
@@ -83,7 +89,7 @@
     const val1 = +document.querySelector('#val1').value;
     const val2 = +document.querySelector('#val2').value;
 
-    if ((!val1 && val1 !==0 )|| (!val2 && val2 !==0)) return;
+    if (!val1 && !val2) return;
 
     let bigger, lower;
 
