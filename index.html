@@ -58,11 +58,10 @@
     #form button {
       padding: 15px 0;
       background: rgb(134 208 213);
-      /* color: black; */
       border: 0;
       border-radius: 5px;
       font-weight: 500;
-      min-width: 50px;
+      min-width: 70px;
       flex-grow: 1;
       -webkit-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
       -moz-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
@@ -100,10 +99,15 @@
       border-radius: 8px;
       background: rgb(208 223 226 / 52%);
     }
+
+    h1 {
+      font-size: 1.8vh;
+    }
   </style>
 </head>
 <body>
   <div id="main">
+    <h1>Percentage calculator between two numbers</h1>
     <div id="form">
       <div>
         <input type="number" placeholder="First Value" step="0.01" id="val1">
@@ -168,8 +172,6 @@
   const run = () => {
     const val1 = getInputValue(val1Input);
     const val2 = getInputValue(val2Input);
-
-    console.log('vall here: ', val1Input.value);
 
     checkAndUpdateErrorStatus();
 
