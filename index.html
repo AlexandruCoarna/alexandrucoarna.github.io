@@ -11,13 +11,88 @@
     margin: auto;
     padding: 10px;
     gap: 5px;
-    flex-direction: row;
+    flex-direction: column;
+    max-width: 920px;
+  }
+
+  #form {
+    padding: 5px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #form input[type="number"] {
+    padding: 10px 15px;
+    outline: none;
+    border-radius:5px;
+    border: 1px solid gray;
+    min-width: 200px;
+    flex-grow: 1;
+  }
+
+  #form button {
+    padding: 10px;
+    background: rgb(75, 173, 234);
+    border: 0;
+    border-radius: 5px;
+    min-width: 170px;
+    flex-grow: 1;
+  }
+
+  #results {
+    padding: 10px 20px;
+    font-size: 20px;
+    text-align: left;
   }
 </style>
 <body>
   <div id="main">
-    <div id="form">Here goes the form</div>
-    <div id="results">Here goes the results</div>
+    <div id="form">
+      <input type="number" placeholder="Primul numar" step=".01">
+      <input type="number" placeholder="Al doilea numar" step=".01">
+      <button id="run">Calculeaza</button>
+      <button id="reset">Reseteaza</button>
+    </div>
+    <div id="results"></div>
   </div>
 </body>
+
+<script>
+  const run = () => {
+    const [val1, val2] = Array.from(document.querySelector('#form').childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE).map(node => +node.value);
+
+    if (!val1 || !val2) return;
+
+    let bigger, lower;
+
+    if (val1 > val2 || val1 === val2) {
+      bigger = val1;
+      lower = val2;
+    } else  {
+      bigger = val2;
+      lower = val1;
+    }
+
+    const diff = bigger - lower;
+
+    const lowerP = (diff * 100) / bigger;
+    const biggerP = (diff * 100) / lower;
+
+    document.querySelector('#results').innerText = `
+      - Diferenta dintre cele doua numere este ${diff}. \n
+      - Aceasta reprezinta [${lowerP}% din ${bigger}] si [${biggerP}% din ${lower}] \n
+      - ${lower} este cu ${lowerP}% mai mic decat ${bigger} \n
+      - ${bigger} este cu ${biggerP}% mai mare decat ${lower} \n
+    `;
+  };
+
+  document.querySelector('#run').addEventListener('click', run);
+  document.querySelector('#reset').addEventListener('click', () => window.location.reload());
+  document.addEventListener('keydown', e => {
+    if (e.key.toLocaleLowerCase() === 'enter') run();
+  })
+</script>
 </html>
