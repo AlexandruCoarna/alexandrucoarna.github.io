@@ -62,35 +62,71 @@
   }
 
   #notice {
-    padding: 5px;
+    padding: 5px 8px;
     color: rgb(224, 0, 0);
+    display: none;
   }
 </style>
 <body>
   <div id="main">
-    <div id="notice">Valorile trebuie sa fie mai mari decat <b>0</b></div>
     <div id="form">
       <div>
         <input type="number" placeholder="Prima valoare" step=".01" id="val1">
         <input type="number" placeholder="A doua valoare" step=".01" id="val2">
       </div>
       <div>
-        <button id="run">Calculeaza</button>
         <button id="reset">Reseteaza</button>
       </div>
     </div>
+    <div id="notice">Valorile trebuie sa fie mai mari decat <b>0</b></div>
     <div id="results"></div>
   </div>
 </body>
 
 <script>
+  (function(){
+    const inputPristineMap = {
+    val1: true,
+    val2: true,
+  };
+
+  const val1Input = document.querySelector('#val1');
+  const val2Input = document.querySelector('#val2');
+  const resultsView = document.querySelector('#results');
+
+  const getInputValue = input => Math.abs(+input.value);
+
   const reaload = () => window.location.reload();
 
-  const run = () => {
-    const val1 = +document.querySelector('#val1').value;
-    const val2 = +document.querySelector('#val2').value;
+  const clearResults = () => resultsView.innerHTML = '';
 
-    if (!val1 && !val2) return;
+  checkAndUpdateErrorStatus = () => {
+    let shouldDisplayMessage = false;
+
+    if (!getInputValue(val1Input) && !inputPristineMap.val1) {
+      val1Input.style.border = '1px solid red';
+      shouldDisplayMessage = true;
+    } else {
+      val1Input.style.border = '1px solid gray';
+    }
+
+    if (!getInputValue(val2Input) && !inputPristineMap.val2) {
+      val2Input.style.border = '1px solid red';
+      shouldDisplayMessage = true;
+    } else {
+      val2Input.style.border = '1px solid gray';
+    }
+
+    document.querySelector('#notice').style.display = shouldDisplayMessage ? 'block' : 'none';
+  };
+
+  const run = () => {
+    const val1 = getInputValue(val1Input);
+    const val2 = getInputValue(val2Input);
+
+    checkAndUpdateErrorStatus();
+
+    if (!val1 || !val2) return;
 
     let bigger, lower;
 
@@ -113,7 +149,7 @@
     const pFromLower = ((bigger / 100) * lower).toFixed(2);
     const pFromBigger = ((lower / 100) * bigger).toFixed(2);
 
-    document.querySelector('#results').innerHTML = `
+    resultsView.innerHTML = `
       <p>
         <div style="margin-bottom: 30px">Diferenta dintre cele doua valori este <b>${diff}</b></div>
 
@@ -135,13 +171,35 @@
     `;
   };
 
-  document.querySelector('#run').addEventListener('click', run);
+  const acceptedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',', 'tab', 'backspace'];
+
+  val1Input.addEventListener('keydown', e => {
+    if (!acceptedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
+  });
+
+  val2Input.addEventListener('keydown', e => {
+    if (!acceptedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
+  });
+
+  val1Input.addEventListener('keyup', e => {
+    if (e.key.toLocaleLowerCase() === '.' || !acceptedKeys.includes(e.key.toLocaleLowerCase())) return;
+
+    run();
+    inputPristineMap.val1 = false;
+  });
+
+  val2Input.addEventListener('keyup', e => {
+    if (e.key.toLocaleLowerCase() === '.' || !acceptedKeys.includes(e.key.toLocaleLowerCase())) return;
+
+    run();
+    inputPristineMap.val2 = false;
+  });
 
   document.querySelector('#reset').addEventListener('click', reaload);
 
-  document.addEventListener('keydown', e => {
-    if (e.key.toLocaleLowerCase() === 'escape') reaload();
-    if (e.key.toLocaleLowerCase() === 'enter') run();
-  })
+  document.addEventListener('keyup', e => {
+    if (e.key.toLocaleLowerCase() === 'escape' || e.key.toLocaleLowerCase() === 'r') reaload();
+  });
+  })();
 </script>
 </html>
