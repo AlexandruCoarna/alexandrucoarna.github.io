@@ -6,6 +6,11 @@
   <title>Document</title>
 </head>
 <style>
+  body {
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
   #main {
     display: flex;
     margin: auto;
@@ -44,7 +49,7 @@
 
   #results {
     padding: 10px 20px;
-    font-size: 20px;
+    font-size: 2vh;
     text-align: left;
   }
 </style>
@@ -78,14 +83,16 @@
 
     const diff = bigger - lower;
 
-    const lowerP = (diff * 100) / bigger;
-    const biggerP = (diff * 100) / lower;
+    const lowerP = ((diff * 100) / bigger).toFixed(2);
+    const biggerP = ((diff * 100) / lower).toFixed(2);
 
     document.querySelector('#results').innerText = `
-      - Diferenta dintre cele doua numere este ${diff}. \n
-      - Aceasta reprezinta [${lowerP}% din ${bigger}] si [${biggerP}% din ${lower}] \n
-      - ${lower} este cu ${lowerP}% mai mic decat ${bigger} \n
-      - ${bigger} este cu ${biggerP}% mai mare decat ${lower} \n
+      Diferenta dintre cele doua numere este ${diff} \n
+      Aceasta reprezinta: \n
+        \t [${lowerP}% din ${bigger}] \n
+        \t [${biggerP}% din ${lower}] \n
+      ${lower} este cu ${lowerP}% mai mic decat ${bigger} \n
+      ${bigger} este cu ${biggerP}% mai mare decat ${lower} \n
     `;
   };
 
