@@ -133,8 +133,6 @@
     return Math.abs(+input.value);
   };
 
-  const reaload = () => window.location.reload();
-
   const clearResults = () => resultsView.innerHTML = '';
 
   checkAndUpdateErrorStatus = () => {
@@ -155,6 +153,16 @@
     }
 
     document.querySelector('#notice').style.display = shouldDisplayMessage ? 'block' : 'none';
+  };
+
+  const reaload = () => {
+    val1Input.value = '';
+    val2Input.value = '';
+    inputPristineMap.val1 = true;
+    inputPristineMap.val2 = true;
+
+    checkAndUpdateErrorStatus();
+    clearResults();
   };
 
   const run = () => {
