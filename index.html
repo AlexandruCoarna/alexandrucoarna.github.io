@@ -12,6 +12,11 @@
       font-family: system-ui;
     }
 
+    body {
+      height: 100%;
+      background: whitesmoke;
+    }
+
     #main {
       display: flex;
       margin: auto;
@@ -242,10 +247,8 @@
 
   val1Input.addEventListener('focus', checkAndUpdateErrorStatus);
   val2Input.addEventListener('focus', checkAndUpdateErrorStatus);
-
   val1Input.addEventListener('blur', checkAndUpdateErrorStatus);
   val2Input.addEventListener('blur', checkAndUpdateErrorStatus);
-
   val1Input.addEventListener('change', run);
   val2Input.addEventListener('change', run);
 
