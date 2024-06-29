@@ -192,7 +192,7 @@
       lower = val1;
     }
 
-    const diff = bigger - lower;
+    const diff = (bigger - lower).toFixed(2);
 
     const lowerP = ((diff * 100) / bigger).toFixed(2);
     const biggerP = ((diff * 100) / lower).toFixed(2);
