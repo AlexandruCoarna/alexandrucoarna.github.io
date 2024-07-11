@@ -164,9 +164,7 @@
 
 <script>
   function main() {
-    const queryParams = new URLSearchParams(window.location.search);
-
-    let lang = queryParams.get('lang') || 'ro';
+    let lang = 'ro';
 
     const updateLangElements = () => {
       document.querySelector('#val1').setAttribute('placeholder', lang === 'ro' ? 'Prima Valoare' : 'First Value');
@@ -353,16 +351,12 @@
 
     document.querySelector('#ro').addEventListener('click', () => {
       lang = 'ro';
-      queryParams.set('lang', lang);
-      window.location.search = queryParams.toString();
       run();
       updateLangElements();
     });
 
     document.querySelector('#en').addEventListener('click', () => {
       lang = 'en';
-      queryParams.set('lang', lang);
-      window.location.search = queryParams.toString();
       run();
       updateLangElements();
     });
