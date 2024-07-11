@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,7 @@
       gap: 5px;
       flex-direction: column;
       max-width: 920px;
-      min-width: 275px;
+      min-width: 300px;
     }
 
     #form {
@@ -44,7 +45,7 @@
 
     #form input[type="number"] {
       padding: 15px 20px;
-      border-radius:5px;
+      border-radius: 5px;
       border: 2px solid rgb(135 182 185);
       min-width: 200px;
       flex-grow: 1;
@@ -63,16 +64,16 @@
       font-weight: 500;
       min-width: 70px;
       flex-grow: 1;
-      -webkit-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
-      -moz-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
-      box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
+      -webkit-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+      -moz-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+      box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
     }
 
     #form button:active {
       background: rgb(108 171 175);
-      -webkit-box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.75);
-      -moz-box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.75);
-      box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.75);
+      -webkit-box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.75);
+      -moz-box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.75);
+      box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.75);
     }
 
     #results {
@@ -104,175 +105,263 @@
       font-size: 17px;
       padding: 0 2px;
     }
+
+    #header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #ro, #en {
+      padding: 5px 0;
+      background: rgb(134 208 213);
+      border: 0;
+      border-radius: 5px;
+      font-weight: 500;
+      min-width: 40px;
+      -webkit-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+      -moz-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+      box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+    }
+
+    #ro {
+      margin-right: 3px;
+    }
+
+    #ro:active, #en:active {
+      background: rgb(108 171 175);
+      -webkit-box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.75);
+      -moz-box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.75);
+      box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.75);
+    }
   </style>
 </head>
+
 <body>
   <div id="main">
-    <h1>Percentage calculator</h1>
-    <div id="form">
-      <div>
-        <input type="number" placeholder="First Value" step="0.01" id="val1">
-        <input type="number" placeholder="Second Value" step="0.01" id="val2">
-      </div>
-      <div>
-        <button id="reset">Reset</button>
+    <div id="header">
+      <h1 id="title"></h1>
+      <div id="lang">
+        <button id="ro">RO</button>
+        <button id="en">EN</button>
       </div>
     </div>
-    <div id="notice">Values must be bigger than <b>0</b></div>
+
+    <div id="form">
+      <div>
+        <input type="number" step="0.01" id="val1">
+        <input type="number" step="0.01" id="val2">
+      </div>
+      <div>
+        <button id="reset"></button>
+      </div>
+    </div>
+    <div id="notice"></div>
     <div id="results"></div>
   </div>
 </body>
 
 <script>
-  window.onload=function(){ setTimeout(function(){ 		window.scrollTo(0, 1); 	}, 0); };
-  (function(){
+  let lang = 'ro';
+
+  function main() {
+    const updateLangElements = () => {
+      document.querySelector('#val1').setAttribute('placeholder', lang === 'ro' ? 'Prima Valoare' : 'First Value');
+      document.querySelector('#val2').setAttribute('placeholder', lang === 'ro' ? 'A Doua Valoare' : 'Second Value');
+      document.querySelector('#title').textContent = lang === 'ro' ? 'Calculator de procente' : 'Percentage Calculator';
+      document.querySelector('#reset').textContent = lang === 'ro' ? 'Reseteaza' : 'Reset';
+      document.querySelector('#notice').innerHTML = lang === 'ro' ? 'Valorile trebuie sa fie mai mari decat <b>0</b>' : 'Values must be bigger than <b>0</b>';
+    };
+
+    updateLangElements();
+
     const inputPristineMap = {
-    val1: true,
-    val2: true,
-  };
+      val1: true,
+      val2: true,
+    };
 
-  const val1Input = document.querySelector('#val1');
-  const val2Input = document.querySelector('#val2');
-  const resultsView = document.querySelector('#results');
+    const val1Input = document.querySelector('#val1');
+    const val2Input = document.querySelector('#val2');
+    const resultsView = document.querySelector('#results');
 
-  const getInputValue = input => {
-    return Math.abs(+input.value);
-  };
+    const getInputValue = input => Math.abs(+input.value);
+    const clearResults = () => resultsView.innerHTML = '';
 
-  const clearResults = () => resultsView.innerHTML = '';
+    const checkAndUpdateErrorStatus = () => {
+      let shouldDisplayMessage = false;
 
-  checkAndUpdateErrorStatus = () => {
-    let shouldDisplayMessage = false;
+      if (!getInputValue(val1Input) && !inputPristineMap.val1) {
+        val1Input.style.border = '2px solid red';
+        shouldDisplayMessage = true;
+      } else {
+        val1Input.style.border = document.activeElement === val1Input ? '2px solid black' : '2px solid rgb(135 182 185)';
+      }
 
-    if (!getInputValue(val1Input) && !inputPristineMap.val1) {
-      val1Input.style.border = '2px solid red';
-      shouldDisplayMessage = true;
-    } else {
-      val1Input.style.border =  document.activeElement === val1Input ? '2px solid black' : '2px solid rgb(135 182 185)';
-    }
+      if (!getInputValue(val2Input) && !inputPristineMap.val2) {
+        val2Input.style.border = '2px solid red';
+        shouldDisplayMessage = true;
+      } else {
+        val2Input.style.border = document.activeElement === val2Input ? '2px solid black' : '2px solid rgb(135 182 185)';
+      }
 
-    if (!getInputValue(val2Input) && !inputPristineMap.val2) {
-      val2Input.style.border = '2px solid red';
-      shouldDisplayMessage = true;
-    } else {
-      val2Input.style.border =  document.activeElement === val2Input ? '2px solid black' : '2px solid rgb(135 182 185)';
-    }
+      document.querySelector('#notice').style.display = shouldDisplayMessage ? 'block' : 'none';
+    };
 
-    document.querySelector('#notice').style.display = shouldDisplayMessage ? 'block' : 'none';
-  };
+    const reaload = () => {
+      val1Input.value = '';
+      val2Input.value = '';
+      inputPristineMap.val1 = true;
+      inputPristineMap.val2 = true;
 
-  const reaload = () => {
-    val1Input.value = '';
-    val2Input.value = '';
-    inputPristineMap.val1 = true;
-    inputPristineMap.val2 = true;
-
-    checkAndUpdateErrorStatus();
-    clearResults();
-  };
-
-  const run = () => {
-    const val1 = getInputValue(val1Input);
-    const val2 = getInputValue(val2Input);
-
-    checkAndUpdateErrorStatus();
-
-    if (!val1 || !val2) {
+      checkAndUpdateErrorStatus();
       clearResults();
-      return;
-    }
+    };
 
-    let bigger, lower;
+    const run = () => {
+      const val1 = getInputValue(val1Input);
+      const val2 = getInputValue(val2Input);
 
-    if (val1 > val2 || val1 === val2) {
-      bigger = val1;
-      lower = val2;
-    } else  {
-      bigger = val2;
-      lower = val1;
-    }
+      checkAndUpdateErrorStatus();
 
-    const diff = (bigger - lower).toFixed(2);
+      if (!val1 || !val2) {
+        clearResults();
+        return;
+      }
 
-    const lowerP = ((diff * 100) / bigger).toFixed(2);
-    const biggerP = ((diff * 100) / lower).toFixed(2);
+      let bigger, lower;
 
-    const lowerPfromBigger = ((lower * 100) / bigger).toFixed(2);
-    const biggerPfromLower = ((bigger * 100) / lower).toFixed(2);
+      if (val1 > val2 || val1 === val2) {
+        bigger = val1;
+        lower = val2;
+      } else {
+        bigger = val2;
+        lower = val1;
+      }
 
-    const pFromLower = ((bigger / 100) * lower).toFixed(2);
-    const pFromBigger = ((lower / 100) * bigger).toFixed(2);
+      const diff = bigger - lower;
 
-    resultsView.innerHTML = `
-      <div>
-        <div class="resultSection">
-          <div>The difference between values is <b>${diff}</b></div>
-          <div>The difference (<b>${diff}</b>) represents:</div>
-          <ul style="margin: 0;">
-            <li style="margin-bottom: 10px"><b>${lowerP}%</b> of <b>${bigger}</b></li>
-            <li><b>${biggerP}%</b> of <b>${lower}</b></li>
-          </ul>
+      const lowerP = ((diff * 100) / bigger).toFixed(2);
+      const biggerP = ((diff * 100) / lower).toFixed(2);
+
+      const lowerPfromBigger = ((lower * 100) / bigger).toFixed(2);
+      const biggerPfromLower = ((bigger * 100) / lower).toFixed(2);
+
+      const pFromLower = ((bigger / 100) * lower).toFixed(2);
+      const pFromBigger = ((lower / 100) * bigger).toFixed(2);
+
+      resultsView.innerHTML = lang === 'ro' ?
+      `
+        <div>
+          <div class="resultSection">
+            <div>Diferenta dintre cele doua valori este <b>${diff}</b></div>
+            <div>Aceasta diferenta (<b>${diff}</b>) reprezinta:</div>
+            <ul style="margin: 0;">
+              <li style="margin-bottom: 10px"><b>${lowerP}%</b> din <b>${bigger}</b></li>
+              <li><b>${biggerP}%</b> din <b>${lower}</b></li>
+            </ul>
+          </div>
+
+          <div class="resultSection">
+            <div><b>${lower}</b> este cu <b>${lowerP}%</b> mai mic decat <b>${bigger}</b></div>
+            <div><b>${bigger}</b> este cu <b>${biggerP}%</b> mai mare decat <b>${lower}</b></div>
+          </div>
+
+          <div class="resultSection">
+            <div><b>${lower}</b> reprezinta <b>${lowerPfromBigger}%</b> din <b>${bigger}</b></div>
+            <div><b>${bigger}</b> reprezinta <b>${biggerPfromLower}%</b> din <b>${lower}</b></div>
+          </div>
+
+          <div class="resultSection">
+            <div><b>${lower}%</b> din <b>${bigger}</b> este <b>${pFromBigger}</b></div>
+            <div><b>${bigger}%</b> din <b>${lower}%</b> este <b>${pFromLower}</b></div>
+          </div>
         </div>
+      ` :
+      `
+        <div>
+          <div class="resultSection">
+            <div>The difference between values is <b>${ diff }</b></div>
+            <div>The difference (<b>${ diff }</b>) represents:</div>
+            <ul style="margin: 0;">
+              <li style="margin-bottom: 10px"><b>${ lowerP }%</b> of <b>${ bigger }</b></li>
+              <li><b>${ biggerP }%</b> of <b>${ lower }</b></li>
+            </ul>
+          </div>
 
-        <div class="resultSection">
-          <div><b>${lower}</b> is <b>${lowerP}%</b> smaller than <b>${bigger}</b></div>
-          <div><b>${bigger}</b> is <b>${biggerP}%</b> bigger than <b>${lower}</b></div>
+          <div class="resultSection">
+            <div><b>${ lower }</b> is <b>${ lowerP }%</b> smaller than <b>${ bigger }</b></div>
+            <div><b>${ bigger }</b> is <b>${ biggerP }%</b> bigger than <b>${ lower }</b></div>
+          </div>
+
+          <div class="resultSection">
+            <div><b>${ lower }</b> represents <b>${ lowerPfromBigger }%</b> of <b>${ bigger }</b></div>
+            <div><b>${ bigger }</b> represents <b>${ biggerPfromLower }%</b> of <b>${ lower }</b></div>
+          </div>
+
+          <div class="resultSection">
+            <div><b>${ lower }%</b> of <b>${ bigger }</b> equals <b>${ pFromBigger }</b></div>
+            <div><b>${ bigger }%</b> of <b>${ lower }</b> equals <b>${ pFromLower }</b></div>
+          </div>
         </div>
+      `;
+    };
 
-        <div class="resultSection">
-          <div><b>${lower}</b> represents <b>${lowerPfromBigger}%</b> of <b>${bigger}</b></div>
-          <div><b>${bigger}</b> represents <b>${biggerPfromLower}%</b> of <b>${lower}</b></div>
-        </div>
+    const breakPristineKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const bannedKeys = ['e', '-', '+'];
 
-        <div class="resultSection">
-          <div><b>${lower}%</b> of <b>${bigger}</b> equals <b>${pFromBigger}</b></div>
-          <div><b>${bigger}%</b> of <b>${lower}</b> equals <b>${pFromLower}</b></div>
-        </div>
-      </div>
-    `;
-  };
+    val1Input.addEventListener('keydown', e => {
+      if (breakPristineKeys.includes(e.key.toLocaleLowerCase())) {
+        inputPristineMap.val1 = false;
+      }
 
-  const breakPristineKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  const bannedKeys = ['e', '-', '+'];
+      if (bannedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
+    });
 
-  val1Input.addEventListener('keydown', e => {
-    if (breakPristineKeys.includes(e.key.toLocaleLowerCase())) {
-      inputPristineMap.val1 = false;
-    }
+    val2Input.addEventListener('keydown', e => {
+      if (breakPristineKeys.includes(e.key.toLocaleLowerCase())) {
+        inputPristineMap.val2 = false;
+      }
 
-    if (bannedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
-  });
+      if (bannedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
+    });
 
-  val2Input.addEventListener('keydown', e => {
-    if (breakPristineKeys.includes(e.key.toLocaleLowerCase())) {
-      inputPristineMap.val2 = false;
-    }
+    val1Input.addEventListener('keyup', e => {
+      if (bannedKeys.includes(e.key.toLocaleLowerCase())) return;
+      run();
+    });
 
-    if (bannedKeys.includes(e.key.toLocaleLowerCase())) e.preventDefault();
-  });
+    val2Input.addEventListener('keyup', e => {
+      if (bannedKeys.includes(e.key.toLocaleLowerCase())) return;
+      run();
+    });
 
-  val1Input.addEventListener('keyup', e => {
-    if (bannedKeys.includes(e.key.toLocaleLowerCase())) return;
-    run();
-  });
+    val1Input.addEventListener('focus', checkAndUpdateErrorStatus);
+    val2Input.addEventListener('focus', checkAndUpdateErrorStatus);
+    val1Input.addEventListener('blur', checkAndUpdateErrorStatus);
+    val2Input.addEventListener('blur', checkAndUpdateErrorStatus);
+    val1Input.addEventListener('change', run);
+    val2Input.addEventListener('change', run);
 
-  val2Input.addEventListener('keyup', e => {
-    if (bannedKeys.includes(e.key.toLocaleLowerCase())) return;
-    run();
-  });
+    document.querySelector('#reset').addEventListener('click', reaload);
 
-  val1Input.addEventListener('focus', checkAndUpdateErrorStatus);
-  val2Input.addEventListener('focus', checkAndUpdateErrorStatus);
-  val1Input.addEventListener('blur', checkAndUpdateErrorStatus);
-  val2Input.addEventListener('blur', checkAndUpdateErrorStatus);
-  val1Input.addEventListener('change', run);
-  val2Input.addEventListener('change', run);
+    document.addEventListener('keyup', e => {
+      if (e.key.toLocaleLowerCase() === 'escape' || e.key.toLocaleLowerCase() === 'r') reaload();
+    });
 
-  document.querySelector('#reset').addEventListener('click', reaload);
+    document.querySelector('#ro').addEventListener('click', () => {
+      lang = 'ro';
+      run();
+      updateLangElements();
+    });
 
-  document.addEventListener('keyup', e => {
-    if (e.key.toLocaleLowerCase() === 'escape' || e.key.toLocaleLowerCase() === 'r') reaload();
-  });
-  })();
+    document.querySelector('#en').addEventListener('click', () => {
+      lang = 'en';
+      run();
+      updateLangElements();
+    });
+  }
+
+  main();
 </script>
+
 </html>
